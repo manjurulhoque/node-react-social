@@ -1,12 +1,14 @@
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import jwt_decode from "jwt-decode";
+
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { userLoginReducer } from './reducers/userReducers';
+import { userLoginReducer, userRegisterReducer } from './reducers/userReducers';
+import { isAuthenticatedFromToken } from './utils/is-authenticated';
 
 const reducer = combineReducers({
-    userLogin: userLoginReducer
+    userLogin: userLoginReducer,
+    userRegister: userRegisterReducer
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo')
@@ -16,9 +18,7 @@ const userInfoFromStorage = localStorage.getItem('userInfo')
 let isAuthenticated = false;
 
 if (userInfoFromStorage && userInfoFromStorage.token) {
-    let decoded = jwt_decode(userInfoFromStorage.token);
-
-    isAuthenticated = new Date(decoded.exp * 1000).getTime() > new Date().getTime();
+    isAuthenticated = isAuthenticatedFromToken(userInfoFromStorage.token)
 }
 
 const initialState = {
