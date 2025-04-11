@@ -1,10 +1,10 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
+import { IPost } from "../types";
 
 const PostSchema = new mongoose.Schema(
     {
-        user: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'users',
+        userId: {
+            type: String,
             required: true,
         },
         description: {
@@ -12,7 +12,7 @@ const PostSchema = new mongoose.Schema(
         },
         images: {
             type: Array,
-            default: []
+            default: [],
         },
         likes: {
             type: Array,
@@ -22,4 +22,4 @@ const PostSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-module.exports = Post = mongoose.model("Post", PostSchema);
+export default mongoose.model<IPost>("Post", PostSchema);

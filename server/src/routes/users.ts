@@ -1,9 +1,11 @@
-const User = require("../models/User");
-const router = require("express").Router();
-const bcrypt = require("bcrypt");
+import { Router, Request, Response } from "express";
+import bcrypt from "bcrypt";
+import User from "../models/User";
+
+const router = Router();
 
 //update user
-router.put("/:id", async (req, res) => {
+router.put("/:id", async (req: Request, res: Response) => {
     if (req.body.userId === req.params.id || req.body.isAdmin) {
         if (req.body.password) {
             try {
@@ -14,7 +16,7 @@ router.put("/:id", async (req, res) => {
             }
         }
         try {
-            const user = await User.findByIdAndUpdate(req.params.id, {
+            await User.findByIdAndUpdate(req.params.id, {
                 $set: req.body,
             });
             res.status(200).json("Account has been updated");
@@ -27,7 +29,7 @@ router.put("/:id", async (req, res) => {
 });
 
 //delete user
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", async (req: Request, res: Response) => {
     if (req.body.userId === req.params.id || req.body.isAdmin) {
         try {
             await User.findByIdAndDelete(req.params.id);
@@ -41,10 +43,16 @@ router.delete("/:id", async (req, res) => {
 });
 
 //get a user
-router.get("/:id", async (req, res) => {
+router.get("/:id", async (req: Request, res: Response) => {
     try {
         const user = await User.findById(req.params.id);
-        const { password, updatedAt, ...other } = user._doc;
+        if (!user) {
+            return res.status(404).json("User not found");
+        }
+
+        const userObject = user.toObject();
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { password, ...other } = userObject;
         res.status(200).json(other);
     } catch (err) {
         res.status(500).json(err);
@@ -52,17 +60,24 @@ router.get("/:id", async (req, res) => {
 });
 
 //follow a user
-router.put("/:id/follow", async (req, res) => {
+router.put("/:id/follow", async (req: Request, res: Response) => {
     if (req.body.userId !== req.params.id) {
         try {
             const user = await User.findById(req.params.id);
             const currentUser = await User.findById(req.body.userId);
+
+            if (!user || !currentUser) {
+                return res.status(404).json("User not found");
+            }
+
             if (!user.followers.includes(req.body.userId)) {
                 await user.updateOne({ $push: { followers: req.body.userId } });
-                await currentUser.updateOne({ $push: { followings: req.params.id } });
+                await currentUser.updateOne({
+                    $push: { followings: req.params.id },
+                });
                 res.status(200).json("user has been followed");
             } else {
-                res.status(403).json("you allready follow this user");
+                res.status(403).json("you already follow this user");
             }
         } catch (err) {
             res.status(500).json(err);
@@ -73,14 +88,21 @@ router.put("/:id/follow", async (req, res) => {
 });
 
 //unfollow a user
-router.put("/:id/unfollow", async (req, res) => {
+router.put("/:id/unfollow", async (req: Request, res: Response) => {
     if (req.body.userId !== req.params.id) {
         try {
             const user = await User.findById(req.params.id);
             const currentUser = await User.findById(req.body.userId);
+
+            if (!user || !currentUser) {
+                return res.status(404).json("User not found");
+            }
+
             if (user.followers.includes(req.body.userId)) {
                 await user.updateOne({ $pull: { followers: req.body.userId } });
-                await currentUser.updateOne({ $pull: { followings: req.params.id } });
+                await currentUser.updateOne({
+                    $pull: { followings: req.params.id },
+                });
                 res.status(200).json("user has been unfollowed");
             } else {
                 res.status(403).json("you dont follow this user");
@@ -93,4 +115,4 @@ router.put("/:id/unfollow", async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
