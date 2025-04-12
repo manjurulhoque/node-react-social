@@ -14,9 +14,9 @@ const PostSchema = new mongoose.Schema(
             type: Array,
             default: [],
         },
-        likes: {
-            type: Array,
-            default: [],
+        likesCount: {
+            type: Number,
+            default: 0,
         },
     },
     { timestamps: true }

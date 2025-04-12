@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import User from "../models/User";
+import Follow from "../models/Follow";
 
 const router = Router();
 
@@ -70,11 +71,18 @@ router.put("/:id/follow", async (req: Request, res: Response) => {
                 return res.status(404).json("User not found");
             }
 
-            if (!user.followers.includes(req.body.userId)) {
-                await user.updateOne({ $push: { followers: req.body.userId } });
-                await currentUser.updateOne({
-                    $push: { followings: req.params.id },
+            const existingFollow = await Follow.findOne({
+                followerId: req.body.userId,
+                followingId: req.params.id
+            });
+
+            if (!existingFollow) {
+                await Follow.create({
+                    followerId: req.body.userId,
+                    followingId: req.params.id
                 });
+                await user.updateOne({ $inc: { followersCount: 1 } });
+                await currentUser.updateOne({ $inc: { followingsCount: 1 } });
                 res.status(200).json("user has been followed");
             } else {
                 res.status(403).json("you already follow this user");
@@ -98,20 +106,27 @@ router.put("/:id/unfollow", async (req: Request, res: Response) => {
                 return res.status(404).json("User not found");
             }
 
-            if (user.followers.includes(req.body.userId)) {
-                await user.updateOne({ $pull: { followers: req.body.userId } });
-                await currentUser.updateOne({
-                    $pull: { followings: req.params.id },
+            const existingFollow = await Follow.findOne({
+                followerId: req.body.userId,
+                followingId: req.params.id
+            });
+
+            if (existingFollow) {
+                await Follow.deleteOne({
+                    followerId: req.body.userId,
+                    followingId: req.params.id
                 });
-                res.status(200).json("user has been unfollowed");
+                await user.updateOne({ $inc: { followersCount: -1 } });
+                await currentUser.updateOne({ $inc: { followingsCount: -1 } });
+                res.status(200).json("User has been unfollowed");
             } else {
-                res.status(403).json("you dont follow this user");
+                res.status(403).json("You don't follow this user");
             }
         } catch (err) {
             res.status(500).json(err);
         }
     } else {
-        res.status(403).json("you cant unfollow yourself");
+        res.status(403).json("You cant unfollow yourself");
     }
 });
 

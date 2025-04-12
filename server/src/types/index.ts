@@ -7,8 +7,8 @@ export interface IUser extends Document {
     password: string;
     profilePicture: string;
     coverPicture: string;
-    followers: string[];
-    followings: string[];
+    followersCount: number;
+    followingsCount: number;
     isAdmin: boolean;
     description: string;
     city: string;
@@ -20,5 +20,5 @@ export interface IPost extends Document {
     userId: string;
     description: string;
     images: string[];
-    likes: string[];
+    likesCount: number;
 }
