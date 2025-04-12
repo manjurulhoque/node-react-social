@@ -13,7 +13,6 @@ export interface SuccessResponse<T> {
 export interface ErrorResponse {
     success: false;
     error: {
-        code: number;
         message: string;
         details?: any;
     };
@@ -40,13 +39,11 @@ export const successResponse = <T>(
  * Helper function to create an error response
  */
 export const errorResponse = (
-    code: number,
     message: string,
     details?: any
 ): ErrorResponse => ({
     success: false,
     error: {
-        code,
         message,
         details,
     },

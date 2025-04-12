@@ -19,7 +19,7 @@ router.post("/", async (req: Request, res: Response) => {
         const savedPost = await newPost.save();
         res.status(status.OK).json(successResponse(savedPost));
     } catch (err) {
-        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse(500, "Failed to create post"));
+        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse("Failed to create post"));
     }
 });
 
@@ -28,17 +28,17 @@ router.put("/:id", async (req: Request, res: Response) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {
-            return res.status(status.NOT_FOUND).json(errorResponse(404, "Post not found"));
+            return res.status(status.NOT_FOUND).json(errorResponse("Post not found"));
         }
 
         if (post.userId === req.body.userId) {
             await post.updateOne({ $set: req.body });
             res.status(status.OK).json(successResponse(post, "Post updated successfully"));
         } else {
-            res.status(status.FORBIDDEN).json(errorResponse(403, "You can update only your post"));
+            res.status(status.FORBIDDEN).json(errorResponse("You can update only your post"));
         }
     } catch (err) {
-        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse(500, "Failed to update post"));
+        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse("Failed to update post"));
     }
 });
 
@@ -47,17 +47,17 @@ router.delete("/:id", async (req: Request, res: Response) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {
-            return res.status(status.NOT_FOUND).json(errorResponse(404, "Post not found"));
+            return res.status(status.NOT_FOUND).json(errorResponse("Post not found"));
         }
 
         if (post.userId === req.body.userId) {
             await post.deleteOne();
             res.status(status.OK).json(successResponse(post, "Post deleted successfully"));
         } else {
-            res.status(status.FORBIDDEN).json(errorResponse(403, "You can delete only your post"));
+            res.status(status.FORBIDDEN).json(errorResponse("You can delete only your post"));
         }
     } catch (err) {
-        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse(500, "Failed to delete post"));
+        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse("Failed to delete post"));
     }
 });
 
@@ -66,7 +66,7 @@ router.put("/:id/like", async (req: Request, res: Response) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {
-            return res.status(status.NOT_FOUND).json(errorResponse(404, "Post not found"));
+            return res.status(status.NOT_FOUND).json(errorResponse("Post not found"));
         }
 
         if (!post.likes.includes(req.body.userId)) {
@@ -77,7 +77,7 @@ router.put("/:id/like", async (req: Request, res: Response) => {
             res.status(status.OK).json(successResponse(post, "Post disliked successfully"));
         }
     } catch (err) {
-        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse(500, "Failed to like/dislike post"));
+        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse("Failed to like/dislike post"));
     }
 });
 
@@ -86,11 +86,11 @@ router.get("/:id", async (req: Request, res: Response) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {
-            return res.status(status.NOT_FOUND).json(errorResponse(404, "Post not found"));
+            return res.status(status.NOT_FOUND).json(errorResponse("Post not found"));
         }
         res.status(status.OK).json(successResponse(post, "Post found successfully"));
     } catch (err) {
-        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse(500, "Failed to get post"));
+        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse("Failed to get post"));
     }
 });
 
@@ -99,7 +99,7 @@ router.get("/timeline/all", async (req: Request, res: Response) => {
     try {
         const currentUser = await User.findById(req.body.userId);
         if (!currentUser) {
-            return res.status(status.NOT_FOUND).json(errorResponse(404, "User not found"));
+            return res.status(status.NOT_FOUND).json(errorResponse("User not found"));
         }
 
         const userPosts = await Post.find({ userId: currentUser._id });
@@ -110,7 +110,7 @@ router.get("/timeline/all", async (req: Request, res: Response) => {
         );
         res.status(status.OK).json(successResponse(userPosts.concat(...friendPosts), "Timeline posts fetched successfully"));
     } catch (err) {
-        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse(500, "Failed to get timeline posts"));
+        res.status(status.INTERNAL_SERVER_ERROR).json(errorResponse("Failed to get timeline posts"));
     }
 });
 
