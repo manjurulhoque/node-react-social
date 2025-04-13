@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { errorResponse } from "../utils/response";
 import httpStatus from "http-status";
+import { errorResponse } from "../types/response";
 
 // Extend Express Request type to include userId
 declare global {
