@@ -5,22 +5,27 @@ import User from "../models/User";
 import { successResponse, errorResponse } from "../types/response";
 import Like from "../models/Like";
 import Follow from "../models/Follow";
+import { auth } from "../middleware/auth";
 
 const router = Router();
 
 // get all posts
-router.get("/", async (req: Request, res: Response) => {
+router.get("/", auth, async (req: Request, res: Response) => {
     const posts = await Post.find();
     res.status(status.OK).json(successResponse(posts));
 });
 
 //create a post
-router.post("/", async (req: Request, res: Response) => {
-    const newPost = new Post(req.body);
+router.post("/", auth, async (req: Request, res: Response) => {
+    const newPost = new Post({
+        ...req.body,
+        userId: req.userId,
+    });
     try {
         const savedPost = await newPost.save();
         res.status(status.OK).json(successResponse(savedPost));
     } catch (err) {
+        console.error("Failed to create post:", err);
         res.status(status.INTERNAL_SERVER_ERROR).json(
             errorResponse("Failed to create post")
         );
