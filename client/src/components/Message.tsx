@@ -2,16 +2,12 @@ import React from 'react';
 import { Alert } from 'react-bootstrap';
 
 interface IProps {
-    variant?: any;
+    variant?: string;
     children?: any;
 }
 
-const Message: React.FC<IProps> = ({ variant, children }) => {
+const Message: React.FC<IProps> = ({ variant = "info", children }) => {
     return <Alert variant={variant}>{children}</Alert>
-}
-
-Message.defaultProps = {
-    variant: 'info',
 }
 
 export default Message;
