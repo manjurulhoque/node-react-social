@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 import logo from "../assets/images/logo.png";
 import { useAuth } from "../context";
+
 const LoginPage: React.FC<any> = () => {
     let navigate = useNavigate();
     const [email, setEmail] = useState("");

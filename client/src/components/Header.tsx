@@ -1,7 +1,6 @@
 import React from 'react';
-import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Navbar, Dropdown, Nav, Form, Card, Image, Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import { Navbar, Dropdown, Nav, Form, Card, Image } from 'react-bootstrap';
 
 
 import user1 from '../assets/images/user/1.jpg';

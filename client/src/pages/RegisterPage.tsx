@@ -9,6 +9,7 @@ import { useAuth } from "../context";
 
 const RegisterPage: React.FC<any> = () => {
     const { register, error, loading, isAuthenticated } = useAuth();
+    const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
     let navigate = useNavigate();
     let location = useLocation();
@@ -24,13 +25,19 @@ const RegisterPage: React.FC<any> = () => {
         }
     }, [isAuthenticated, navigate, redirect]);
 
-    const onSubmit = (e: React.SyntheticEvent) => {
+    useEffect(() => {
+        if (registrationSuccess) {
+            // Redirect to login page after successful registration
+            navigate("/login");
+        }
+    }, [registrationSuccess, navigate]);
+
+    const onSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        register(name, email, password).then(() => {
-            if (!error) {
-                navigate(redirect);
-            }
-        });
+        const success = await register(name, email, password);
+        if (success) {
+            setRegistrationSuccess(true);
+        }
     };
 
     return (
@@ -66,6 +73,12 @@ const RegisterPage: React.FC<any> = () => {
                                 </p>
                                 {error && (
                                     <Message variant="danger">{error}</Message>
+                                )}
+                                {registrationSuccess && (
+                                    <Message variant="success">
+                                        Registration successful! Redirecting to
+                                        login page...
+                                    </Message>
                                 )}
                                 <Form className="mt-4" onSubmit={onSubmit}>
                                     <Form.Group className="form-group">
@@ -108,56 +121,31 @@ const RegisterPage: React.FC<any> = () => {
                                         />
                                     </Form.Group>
                                     <div className="d-inline-block w-100">
-                                        <Form.Check className="d-inline-block mt-2 pt-1">
-                                            <Form.Check.Input
-                                                type="checkbox"
-                                                className="me-2"
-                                                id="customCheck1"
-                                            />
-                                            <Form.Check.Label>
-                                                I accept{" "}
-                                                <Link to="#">
-                                                    Terms and Conditions
-                                                </Link>
-                                            </Form.Check.Label>
-                                        </Form.Check>
                                         <Button
+                                            variant="primary"
                                             type="submit"
-                                            className="btn-primary float-end"
+                                            className="float-end"
                                             disabled={loading}
                                         >
                                             {loading ? (
                                                 <>
-                                                    <span className="spinner-border spinner-border-sm" />
-                                                    Signing up...
+                                                    <span
+                                                        className="spinner-border spinner-border-sm me-2"
+                                                        role="status"
+                                                        aria-hidden="true"
+                                                    ></span>
+                                                    Registering...
                                                 </>
                                             ) : (
-                                                "Sign Up"
+                                                "Register"
                                             )}
                                         </Button>
                                     </div>
                                     <div className="sign-info">
                                         <span className="dark-color d-inline-block line-height-2">
                                             Already have an account?{" "}
-                                            <Link to="/login">Log In</Link>
+                                            <Link to="/login">Sign in</Link>
                                         </span>
-                                        <ul className="iq-social-media">
-                                            <li>
-                                                <Link to="#">
-                                                    <i className="ri-facebook-box-line" />
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link to="#">
-                                                    <i className="ri-twitter-line" />
-                                                </Link>
-                                            </li>
-                                            <li>
-                                                <Link to="#">
-                                                    <i className="ri-instagram-line" />
-                                                </Link>
-                                            </li>
-                                        </ul>
                                     </div>
                                 </Form>
                             </div>

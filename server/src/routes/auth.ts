@@ -78,6 +78,10 @@ router.post("/login", async (req: Request, res: Response) => {
                 _id: userObj._id,
                 name: userObj.name,
                 email: userObj.email,
+                profilePicture: userObj.profilePicture,
+                coverPicture: userObj.coverPicture,
+                followersCount: userObj.followersCount,
+                followingsCount: userObj.followingsCount,
                 token: generateToken(userObj._id.toString(), userObj.email),
             })
         );

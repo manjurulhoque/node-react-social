@@ -5,7 +5,6 @@ import React, {
     useEffect,
     ReactNode,
 } from "react";
-import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import AxiosConfig from "../AxiosConfig";
 
@@ -25,12 +24,16 @@ interface User {
 }
 
 interface AuthContextType {
-    user: User | null;
+    user: Partial<User> | null;
     isAuthenticated: boolean;
     loading: boolean;
     error: string | null;
     login: (email: string, password: string) => Promise<void>;
-    register: (name: string, email: string, password: string) => Promise<void>;
+    register: (
+        name: string,
+        email: string,
+        password: string
+    ) => Promise<boolean>;
     logout: () => void;
     clearError: () => void;
 }
@@ -50,7 +53,7 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<Partial<User> | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -104,18 +107,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 email,
                 password,
             });
-            localStorage.setItem("token", res.data.token);
-            setUser(res.data.user);
-            setIsAuthenticated(true);
+
+            // Check if the response has the expected structure
+            if (res.data && res.data.data && res.data.data.token) {
+                localStorage.setItem("token", res.data.data.token);
+                setUser({
+                    _id: res.data.data.user?._id,
+                    name: res.data.data.user?.name,
+                    email: res.data.data.user?.email,
+                    profilePicture: res.data.data.user?.profilePicture,
+                    coverPicture: res.data.data.user?.coverPicture,
+                    followersCount: res.data.data.user?.followersCount,
+                    followingsCount: res.data.data.user?.followingsCount,
+                });
+                setIsAuthenticated(true);
+            } else {
+                // Handle unexpected response structure
+                console.error("Unexpected login response structure:", res.data);
+                setError("Login failed: Invalid response from server");
+            }
+
             setLoading(false);
         } catch (err: any) {
-            console.log(err);
+            console.error("Login error:", err);
             setError(err.response?.data?.error?.message || "Login failed");
             setLoading(false);
         }
     };
 
-    const register = async (name: string, email: string, password: string) => {
+    const register = async (
+        name: string,
+        email: string,
+        password: string
+    ): Promise<boolean> => {
         try {
             setLoading(true);
             setError(null);
@@ -124,13 +148,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 email,
                 password,
             });
-            localStorage.setItem("token", res.data.token);
-            setUser(res.data.user);
-            setIsAuthenticated(true);
-            setLoading(false);
+
+            // Check if the response has the expected structure
+            if (res.data && res.data.data) {
+                // Registration successful, but don't log in automatically
+                setLoading(false);
+                return true;
+            } else {
+                // Handle unexpected response structure
+                console.error(
+                    "Unexpected register response structure:",
+                    res.data
+                );
+                setError("Registration failed: Invalid response from server");
+                setLoading(false);
+                return false;
+            }
         } catch (err: any) {
-            setError(err.response?.data?.error?.message || "Registration failed");
+            setError(
+                err.response?.data?.error?.message || "Registration failed"
+            );
             setLoading(false);
+            return false;
         }
     };
 

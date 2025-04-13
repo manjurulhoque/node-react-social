@@ -5,7 +5,6 @@ import React, {
     useEffect,
     ReactNode,
 } from "react";
-import axios from "axios";
 import { useAuth } from "./AuthContext";
 import { Post } from "../interfaces/post.interface";
 import AxiosConfig from "../AxiosConfig";
@@ -61,10 +60,10 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setPosts(res.data);
+            setPosts(res.data?.data || []);
             setLoading(false);
         } catch (err: any) {
-            setError(err.response?.data?.message || "Failed to fetch posts");
+            setError(err.response?.data?.error?.message || "Failed to fetch posts");
             setLoading(false);
         }
     };
@@ -82,10 +81,10 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            setPosts([res.data, ...posts]);
+            setPosts([res.data?.data, ...posts]);
             setLoading(false);
         } catch (err: any) {
-            setError(err.response?.data?.message || "Failed to create post");
+            setError(err.response?.data?.error?.message || "Failed to create post");
             setLoading(false);
         }
     };
@@ -103,7 +102,7 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
             setPosts(posts.filter((post) => post._id !== postId));
             setLoading(false);
         } catch (err: any) {
-            setError(err.response?.data?.message || "Failed to delete post");
+            setError(err.response?.data?.error?.message || "Failed to delete post");
             setLoading(false);
         }
     };
@@ -131,7 +130,7 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
                 )
             );
         } catch (err: any) {
-            setError(err.response?.data?.message || "Failed to like post");
+            setError(err.response?.data?.error?.message || "Failed to like post");
         }
     };
 

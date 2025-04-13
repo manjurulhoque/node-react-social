@@ -5,7 +5,7 @@ import AxiosConfig from "../AxiosConfig";
 
 interface UserContextType {
     users: User[];
-    currentUser: User | null;
+    currentUser: Partial<User> | null;
     loading: boolean;
     error: string | null;
     fetchUsers: () => Promise<void>;
@@ -32,10 +32,10 @@ interface UserProviderProps {
 
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const [users, setUsers] = useState<User[]>([]);
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [currentUser, setCurrentUser] = useState<Partial<User> | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
-    const { user, isAuthenticated } = useAuth();
+    const { user } = useAuth();
 
     // Set current user when auth user changes
     React.useEffect(() => {
@@ -117,7 +117,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             if (currentUser) {
                 setCurrentUser({
                     ...currentUser,
-                    followingsCount: currentUser.followingsCount + 1,
+                    followingsCount: currentUser.followingsCount || 0 + 1,
                 });
             }
         } catch (err: any) {
@@ -152,7 +152,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             if (currentUser) {
                 setCurrentUser({
                     ...currentUser,
-                    followingsCount: currentUser.followingsCount - 1,
+                    followingsCount: currentUser.followingsCount || 0 - 1,
                 });
             }
         } catch (err: any) {
