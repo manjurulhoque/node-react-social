@@ -1,6 +1,5 @@
 import React from 'react';
 import { useState } from 'react';
-import { RootStateOrAny, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import { Navbar, Dropdown, Nav, Form, Card, Image, Button } from 'react-bootstrap';
 
@@ -9,9 +8,6 @@ import user1 from '../assets/images/user/1.jpg';
 
 
 const Header: React.FC<any> = () => {
-
-    const userLogin = useSelector((state: RootStateOrAny) => state.userLogin);
-    const { loading, error, userInfo, isAuthenticated } = userLogin;
 
     const minisidebar = () => {
         document.body.classList.toggle('sidebar-main');
@@ -55,7 +51,7 @@ const Header: React.FC<any> = () => {
                                     <Dropdown.Toggle href="#" bsPrefix="d-flex align-items-center search-toggle" >
                                         <Image src={user1} className="img-fluid rounded-circle me-3" alt="user" />
                                         <div className="caption">
-                                            <h6 className="mb-0 line-height">{userInfo?.email}</h6>
+                                            <h6 className="mb-0 line-height">email</h6>
                                         </div>
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu className="sub-drop dropdown-menu caption-menu" aria-labelledby="drop-down-arrow">

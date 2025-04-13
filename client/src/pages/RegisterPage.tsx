@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector, RootStateOrAny } from 'react-redux';
 import { useLocation, useNavigate } from "react-router";
 import { Link } from 'react-router-dom';
 import { Row, Col, Container, Form, Button, Image } from 'react-bootstrap';
-import { register } from '../actions/userActions';
 import Loader from "../components/Loader";
 import Message from "../components/Message";
-import { RootState } from '../store';
 
 import logo from '../assets/images/logo.png';
 
@@ -18,24 +15,10 @@ const RegisterPage: React.FC<any> = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const dispatch = useDispatch();
-
-    const userLogin = useSelector((state: RootState) => state.userLogin);
-    const { loading, error, userInfo, isAuthenticated } = userLogin;
-
     const redirect = location.search ? location.search.split('=')[1] : '/login';
-
-    useEffect(() => {
-        if (isAuthenticated) navigate(redirect);
-    }, [isAuthenticated]);
-
-    useEffect(() => {
-        if (userInfo) navigate(redirect);
-    }, [userInfo]);
 
     const onSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
-        dispatch(register(name, email, password));
     }
 
     return (
@@ -83,11 +66,7 @@ const RegisterPage: React.FC<any> = () => {
                                             <Form.Check.Label>I accept <Link to="#">Terms and Conditions</Link></Form.Check.Label>
                                         </Form.Check>
                                         <Button type="submit" className="btn-primary float-end">
-                                            {
-                                                loading && (
-                                                    <span className="spinner-border spinner-border-sm" />
-                                                )
-                                            }
+                                            <span className="spinner-border spinner-border-sm" />
                                             Sign Up
                                         </Button>
                                     </div>

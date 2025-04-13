@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector, RootStateOrAny } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { Row, Col, Container, Dropdown, OverlayTrigger, Tooltip, Modal, Card } from 'react-bootstrap';
 import Layout from '../components/layouts/Layout';
@@ -12,16 +11,8 @@ const HomePage: React.FC<any> = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     let navigate = useNavigate();
-    const userLogin = useSelector((state: RootStateOrAny) => state.userLogin);
-    const { loading, error, userInfo, isAuthenticated } = userLogin;
 
     const redirect: string = '/login';
-
-    // useEffect(() => {
-    //     if (!isAuthenticated) {
-    //         navigate(redirect);
-    //     }
-    // }, [isAuthenticated])
 
     return (
         <Layout>
