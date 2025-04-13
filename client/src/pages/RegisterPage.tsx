@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { Row, Col, Container, Form, Button, Image } from "react-bootstrap";
-import Loader from "../components/Loader";
 import Message from "../components/Message";
 
 import logo from "../assets/images/logo.png";
