@@ -49,7 +49,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             setLoading(true);
             setError(null);
             const token = localStorage.getItem("token");
-            const res = await AxiosConfig.get("/api/users", {
+            const res = await AxiosConfig.get("/users", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -67,7 +67,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             setLoading(true);
             setError(null);
             const token = localStorage.getItem("token");
-            const res = await AxiosConfig.get(`/api/users/${userId}`, {
+            const res = await AxiosConfig.get(`/users/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -95,7 +95,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             setError(null);
             const token = localStorage.getItem("token");
             const res = await AxiosConfig.put(
-                `/api/users/${userId}/follow`,
+                `/users/${userId}/follow`,
                 {},
                 {
                     headers: {
@@ -130,7 +130,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             setError(null);
             const token = localStorage.getItem("token");
             const res = await AxiosConfig.put(
-                `/api/users/${userId}/unfollow`,
+                `/users/${userId}/unfollow`,
                 {},
                 {
                     headers: {
@@ -165,7 +165,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             setLoading(true);
             setError(null);
             const token = localStorage.getItem("token");
-            const res = await AxiosConfig.put("/api/users/profile", userData, {
+            const res = await AxiosConfig.put("/users/profile", userData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

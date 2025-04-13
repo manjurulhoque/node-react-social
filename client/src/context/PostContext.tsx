@@ -56,7 +56,7 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
             setLoading(true);
             setError(null);
             const token = localStorage.getItem("token");
-            const res = await AxiosConfig.get("/api/posts", {
+            const res = await AxiosConfig.get("/posts", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -77,7 +77,7 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
             setLoading(true);
             setError(null);
             const token = localStorage.getItem("token");
-            const res = await AxiosConfig.post("/api/posts", postData, {
+            const res = await AxiosConfig.post("/posts", postData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -95,7 +95,7 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
             setLoading(true);
             setError(null);
             const token = localStorage.getItem("token");
-            await AxiosConfig.delete(`/api/posts/${postId}`, {
+            await AxiosConfig.delete(`/posts/${postId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -113,7 +113,7 @@ export const PostProvider: React.FC<PostProviderProps> = ({ children }) => {
             setError(null);
             const token = localStorage.getItem("token");
             const res = await AxiosConfig.put(
-                `/api/posts/${postId}/like`,
+                `/posts/${postId}/like`,
                 {},
                 {
                     headers: {

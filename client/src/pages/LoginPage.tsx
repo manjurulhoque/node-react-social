@@ -1,27 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Loader from "../components/Loader";
 import Message from "../components/Message";
 import { Row, Col, Container, Form, Button, Image } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 import logo from "../assets/images/logo.png";
-import AxiosConfig from "../AxiosConfig";
-
+import { useAuth } from "../context";
 const LoginPage: React.FC<any> = () => {
     let navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const { login, isAuthenticated, error, loading } = useAuth();
 
     const redirect = "/";
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            navigate(redirect);
+        }
+    }, [isAuthenticated, navigate, redirect]);
+
     const onSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
-        // const { data } = await AxiosConfig.post(
-        //     '/auth/login',
-        //     { email, password },
-        //     config
-        // )
+        login(email, password).then(() => {
+            if (!error) {
+                navigate(redirect);
+            }
+        });
     };
 
     return (
@@ -52,6 +57,9 @@ const LoginPage: React.FC<any> = () => {
                             <div className="sign-in-from">
                                 <h1 className="mb-0">Sign in</h1>
                                 <p>Enter your email address and password</p>
+                                {error && (
+                                    <Message variant="danger">{error}</Message>
+                                )}
                                 <Form className="mt-4" onSubmit={onSubmit}>
                                     <Form.Group className="form-group">
                                         <Form.Label htmlFor="exampleInputEmail1">
@@ -99,8 +107,20 @@ const LoginPage: React.FC<any> = () => {
                                             variant="primary"
                                             type="submit"
                                             className="float-end"
+                                            disabled={loading}
                                         >
-                                            Sign in
+                                            {loading ? (
+                                                <>
+                                                    <span
+                                                        className="spinner-border spinner-border-sm me-2"
+                                                        role="status"
+                                                        aria-hidden="true"
+                                                    ></span>
+                                                    Signing in...
+                                                </>
+                                            ) : (
+                                                "Sign in"
+                                            )}
                                         </Button>
                                     </div>
                                     <div className="sign-info">

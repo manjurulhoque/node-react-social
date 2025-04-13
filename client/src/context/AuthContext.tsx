@@ -30,7 +30,7 @@ interface AuthContextType {
     loading: boolean;
     error: string | null;
     login: (email: string, password: string) => Promise<void>;
-    register: (userData: any) => Promise<void>;
+    register: (name: string, email: string, password: string) => Promise<void>;
     logout: () => void;
     clearError: () => void;
 }
@@ -82,7 +82,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const fetchUserData = async (token: string) => {
         try {
-            const res = await AxiosConfig.get("/api/users/me", {
+            const res = await AxiosConfig.get("/users/me", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -100,7 +100,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
             setLoading(true);
             setError(null);
-            const res = await AxiosConfig.post("/api/auth/login", {
+            const res = await AxiosConfig.post("/auth/login", {
                 email,
                 password,
             });
@@ -109,22 +109,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setIsAuthenticated(true);
             setLoading(false);
         } catch (err: any) {
-            setError(err.response?.data?.message || "Login failed");
+            console.log(err);
+            setError(err.response?.data?.error?.message || "Login failed");
             setLoading(false);
         }
     };
 
-    const register = async (userData: any) => {
+    const register = async (name: string, email: string, password: string) => {
         try {
             setLoading(true);
             setError(null);
-            const res = await AxiosConfig.post("/api/auth/register", userData);
+            const res = await AxiosConfig.post("/auth/register", {
+                name,
+                email,
+                password,
+            });
             localStorage.setItem("token", res.data.token);
             setUser(res.data.user);
             setIsAuthenticated(true);
             setLoading(false);
         } catch (err: any) {
-            setError(err.response?.data?.message || "Registration failed");
+            setError(err.response?.data?.error?.message || "Registration failed");
             setLoading(false);
         }
     };
