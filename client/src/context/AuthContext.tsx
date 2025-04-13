@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import AxiosConfig from "../AxiosConfig";
 
 interface User {
     _id: string;
@@ -81,7 +82,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const fetchUserData = async (token: string) => {
         try {
-            const res = await axios.get("/api/users/me", {
+            const res = await AxiosConfig.get("/api/users/me", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -99,7 +100,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
             setLoading(true);
             setError(null);
-            const res = await axios.post("/api/auth/login", {
+            const res = await AxiosConfig.post("/api/auth/login", {
                 email,
                 password,
             });
@@ -117,7 +118,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         try {
             setLoading(true);
             setError(null);
-            const res = await axios.post("/api/auth/register", userData);
+            const res = await AxiosConfig.post("/api/auth/register", userData);
             localStorage.setItem("token", res.data.token);
             setUser(res.data.user);
             setIsAuthenticated(true);

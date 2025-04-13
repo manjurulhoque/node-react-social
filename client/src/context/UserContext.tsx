@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, ReactNode } from "react";
-import axios from "axios";
 import { useAuth } from "./AuthContext";
 import { User } from "../interfaces/user.interface";
+import AxiosConfig from "../AxiosConfig";
 
 interface UserContextType {
     users: User[];
@@ -49,7 +49,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             setLoading(true);
             setError(null);
             const token = localStorage.getItem("token");
-            const res = await axios.get("/api/users", {
+            const res = await AxiosConfig.get("/api/users", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -67,7 +67,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             setLoading(true);
             setError(null);
             const token = localStorage.getItem("token");
-            const res = await axios.get(`/api/users/${userId}`, {
+            const res = await AxiosConfig.get(`/api/users/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -94,7 +94,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         try {
             setError(null);
             const token = localStorage.getItem("token");
-            const res = await axios.put(
+            const res = await AxiosConfig.put(
                 `/api/users/${userId}/follow`,
                 {},
                 {
@@ -129,7 +129,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         try {
             setError(null);
             const token = localStorage.getItem("token");
-            const res = await axios.put(
+            const res = await AxiosConfig.put(
                 `/api/users/${userId}/unfollow`,
                 {},
                 {
@@ -165,7 +165,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             setLoading(true);
             setError(null);
             const token = localStorage.getItem("token");
-            const res = await axios.put("/api/users/profile", userData, {
+            const res = await AxiosConfig.put("/api/users/profile", userData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
