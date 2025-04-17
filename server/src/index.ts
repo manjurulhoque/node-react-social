@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import swaggerUi from "swagger-ui-express";
+const swaggerDocument = require("./swagger.json");
 
 import postsRoute from "./routes/posts";
 import usersRoute from "./routes/users";
@@ -39,6 +41,10 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRoute);
 app.use("/api/users", usersRoute);
 app.use("/api/posts", postsRoute);
+
+// Swagger UI setup
+app.use("/api-docs", swaggerUi.serve as any);
+app.get("/api-docs", swaggerUi.setup(swaggerDocument) as any);
 
 // Start server
 app.listen(PORT, () => {

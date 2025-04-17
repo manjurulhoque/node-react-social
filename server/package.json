@@ -7,11 +7,13 @@
     "start": "node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "swagger": "ts-node src/swagger.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/swagger-ui-express": "^4.1.8",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
@@ -21,7 +23,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
     "morgan": "^1.10.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -31,6 +34,7 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/morgan": "^1.9.9",
     "@types/node": "^20.12.13",
+    "swagger-autogen": "^2.23.7",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5"
