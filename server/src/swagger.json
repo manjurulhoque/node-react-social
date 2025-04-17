@@ -11,7 +11,7 @@
     }
   ],
   "paths": {
-    "/register": {
+    "/auth/register": {
       "post": {
         "description": "",
         "responses": {
@@ -41,7 +41,7 @@
         }
       }
     },
-    "/login": {
+    "/auth/login": {
       "post": {
         "description": "",
         "responses": {
@@ -68,7 +68,7 @@
         }
       }
     },
-    "/{id}": {
+    "/users/{id}": {
       "put": {
         "description": "",
         "parameters": [
@@ -161,7 +161,7 @@
         }
       }
     },
-    "/me": {
+    "/users/me": {
       "get": {
         "description": "",
         "parameters": [
@@ -180,7 +180,7 @@
         }
       }
     },
-    "/{id}/follow": {
+    "/users/{id}/follow": {
       "put": {
         "description": "",
         "parameters": [
@@ -214,7 +214,7 @@
         }
       }
     },
-    "/{id}/unfollow": {
+    "/users/{id}/unfollow": {
       "put": {
         "description": "",
         "parameters": [
@@ -248,7 +248,7 @@
         }
       }
     },
-    "/": {
+    "/posts/": {
       "get": {
         "description": "",
         "parameters": [
@@ -284,7 +284,91 @@
         }
       }
     },
-    "/{id}/like": {
+    "/posts/{id}": {
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "example": "any"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/posts/{id}/like": {
       "put": {
         "description": "",
         "parameters": [
@@ -318,7 +402,7 @@
         }
       }
     },
-    "/timeline/all": {
+    "/posts/timeline/all": {
       "get": {
         "description": "",
         "responses": {

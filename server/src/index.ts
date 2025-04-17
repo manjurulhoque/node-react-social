@@ -7,9 +7,7 @@ import morgan from "morgan";
 import swaggerUi from "swagger-ui-express";
 const swaggerDocument = require("./swagger.json");
 
-import postsRoute from "./routes/posts";
-import usersRoute from "./routes/users";
-import authRoute from "./routes/auth";
+import apiRouter from "./routers";
 
 dotenv.config();
 
@@ -38,9 +36,7 @@ app.get("/", (req, res) => {
 });
 
 // API Routes
-app.use("/api/auth", authRoute);
-app.use("/api/users", usersRoute);
-app.use("/api/posts", postsRoute);
+app.use("/api", apiRouter);
 
 // Swagger UI setup
 app.use("/api-docs", swaggerUi.serve as any);
