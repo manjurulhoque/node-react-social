@@ -19,7 +19,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
         if (!authHeader || !authHeader.startsWith("Bearer ")) {
             return res
                 .status(httpStatus.UNAUTHORIZED)
-                .json(errorResponse("Authentication required"));
+                .json(errorResponse("You must be authenticated to access this resource"));
         }
 
         const token = authHeader.split(" ")[1];
@@ -34,6 +34,7 @@ export const auth = async (req: Request, res: Response, next: NextFunction) => {
 
         next();
     } catch (error) {
+        console.log(error);
         return res
             .status(httpStatus.UNAUTHORIZED)
             .json(errorResponse("Invalid or expired token"));
