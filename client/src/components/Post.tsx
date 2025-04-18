@@ -72,7 +72,7 @@ const Post: React.FC<PostProps> = ({ post }) => {
                             <img
                                 key={index}
                                 src={image}
-                                alt={`Post image ${index + 1}`}
+                                alt={`Post ${index + 1}`}
                                 className="img-fluid rounded mb-2"
                                 style={{ maxHeight: "300px", width: "auto" }}
                             />
