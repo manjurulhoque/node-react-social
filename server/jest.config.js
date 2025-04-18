@@ -8,4 +8,4 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'json', 'node'],
   setupFilesAfterEnv: ['<rootDir>/src/__tests__/config/setup.ts'],
-}; 
+};
