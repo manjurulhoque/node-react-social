@@ -11,8 +11,38 @@ const router = Router();
 
 // get all posts
 router.get("/", auth, async (req: Request, res: Response) => {
-    const posts = await Post.find();
-    res.status(status.OK).json(successResponse(posts));
+    try {
+        const posts = await Post.find().sort({ createdAt: -1 });
+
+        // Get user information for each post
+        const postsWithUsers = await Promise.all(
+            posts.map(async (post) => {
+                const user = await User.findById(post.userId);
+                const postObj = post.toObject();
+
+                if (user) {
+                    postObj.user = {
+                        _id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        profilePicture: user.profilePicture,
+                        coverPicture: user.coverPicture,
+                        followersCount: user.followersCount,
+                        followingsCount: user.followingsCount,
+                    };
+                }
+
+                return postObj;
+            })
+        );
+
+        res.status(status.OK).json(successResponse(postsWithUsers));
+    } catch (err) {
+        console.error("Failed to fetch posts:", err);
+        res.status(status.INTERNAL_SERVER_ERROR).json(
+            errorResponse("Failed to fetch posts")
+        );
+    }
 });
 
 //create a post
@@ -140,8 +170,25 @@ router.get("/:id", async (req: Request, res: Response) => {
                 .status(status.NOT_FOUND)
                 .json(errorResponse("Post not found"));
         }
+
+        // Get user information for the post
+        const user = await User.findById(post.userId);
+        const postObj = post.toObject();
+
+        if (user) {
+            postObj.user = {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                profilePicture: user.profilePicture,
+                coverPicture: user.coverPicture,
+                followersCount: user.followersCount,
+                followingsCount: user.followingsCount,
+            };
+        }
+
         res.status(status.OK).json(
-            successResponse(post, "Post found successfully")
+            successResponse(postObj, "Post found successfully")
         );
     } catch (err) {
         res.status(status.INTERNAL_SERVER_ERROR).json(
@@ -167,9 +214,35 @@ router.get("/timeline/all", async (req: Request, res: Response) => {
                 return Post.find({ userId: follow.followingId });
             })
         );
+
+        // Combine all posts
+        const allPosts = userPosts.concat(...friendPosts);
+
+        // Get user information for each post
+        const postsWithUsers = await Promise.all(
+            allPosts.map(async (post) => {
+                const user = await User.findById(post.userId);
+                const postObj = post.toObject();
+
+                if (user) {
+                    postObj.user = {
+                        _id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        profilePicture: user.profilePicture,
+                        coverPicture: user.coverPicture,
+                        followersCount: user.followersCount,
+                        followingsCount: user.followingsCount,
+                    };
+                }
+
+                return postObj;
+            })
+        );
+
         res.status(status.OK).json(
             successResponse(
-                userPosts.concat(...friendPosts),
+                postsWithUsers,
                 "Timeline posts fetched successfully"
             )
         );

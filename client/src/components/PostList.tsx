@@ -9,7 +9,7 @@ const PostList: React.FC = () => {
 
     useEffect(() => {
         fetchPosts();
-    }, [fetchPosts]);
+    }, []);
 
     if (loading && posts.length === 0) {
         return (

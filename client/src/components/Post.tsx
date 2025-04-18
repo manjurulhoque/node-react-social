@@ -35,14 +35,14 @@ const Post: React.FC<PostProps> = ({ post }) => {
     });
 
     return (
-        <Card className="card-block card-stretch card-height mb-4">
+        <Card className="card-block mb-4">
             <Card.Body>
                 <div className="d-flex align-items-center mb-3">
                     <Link to={`/profile/${post.user?._id}`}>
                         <img
                             src={
                                 post.user?.profilePicture ||
-                                "/default-avatar.png"
+                                `https://ui-avatars.com/api/?name=${post.user?.name}`
                             }
                             alt={post.user?.name || "User"}
                             className="rounded-circle"

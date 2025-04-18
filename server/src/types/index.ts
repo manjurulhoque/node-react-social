@@ -21,4 +21,13 @@ export interface IPost extends Document {
     description: string;
     images: string[];
     likesCount: number;
+    user?: {
+        _id: string;
+        name: string;
+        email: string;
+        profilePicture: string;
+        coverPicture: string;
+        followersCount: number;
+        followingsCount: number;
+    };
 }
