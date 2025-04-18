@@ -155,6 +155,7 @@ router.put("/:id/like", async (req: Request, res: Response) => {
             );
         }
     } catch (err) {
+        console.error("Failed to like/dislike post:", err);
         res.status(status.INTERNAL_SERVER_ERROR).json(
             errorResponse("Failed to like/dislike post")
         );
@@ -191,6 +192,7 @@ router.get("/:id", async (req: Request, res: Response) => {
             successResponse(postObj, "Post found successfully")
         );
     } catch (err) {
+        console.error("Failed to get post:", err);
         res.status(status.INTERNAL_SERVER_ERROR).json(
             errorResponse("Failed to get post")
         );
@@ -247,6 +249,7 @@ router.get("/timeline/all", async (req: Request, res: Response) => {
             )
         );
     } catch (err) {
+        console.error("Failed to get timeline posts:", err);
         res.status(status.INTERNAL_SERVER_ERROR).json(
             errorResponse("Failed to get timeline posts")
         );
