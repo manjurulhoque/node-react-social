@@ -3,6 +3,7 @@ import { Document } from "mongoose";
 export interface IUser extends Document {
     _id: string;
     name: string;
+    username: string;
     email: string;
     password: string;
     profilePicture: string;
@@ -24,6 +25,7 @@ export interface IPost extends Document {
     user?: {
         _id: string;
         name: string;
+        username: string;
         email: string;
         profilePicture: string;
         coverPicture: string;

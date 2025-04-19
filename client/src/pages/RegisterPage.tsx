@@ -14,6 +14,7 @@ const RegisterPage: React.FC<any> = () => {
     let navigate = useNavigate();
     let location = useLocation();
     const [name, setName] = useState("");
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -34,7 +35,7 @@ const RegisterPage: React.FC<any> = () => {
 
     const onSubmit = async (e: React.SyntheticEvent) => {
         e.preventDefault();
-        const success = await register(name, email, password);
+        const success = await register(name, username, email, password);
         if (success) {
             setRegistrationSuccess(true);
         }
@@ -92,6 +93,19 @@ const RegisterPage: React.FC<any> = () => {
                                             className="mb-0"
                                             id="exampleInputEmail1"
                                             placeholder="Your Full Name"
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className="form-group">
+                                        <Form.Label>Username</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            required
+                                            onChange={(e) =>
+                                                setUsername(e.target.value)
+                                            }
+                                            className="mb-0"
+                                            id="exampleInputUsername"
+                                            placeholder="Choose a username"
                                         />
                                     </Form.Group>
                                     <Form.Group className="form-group">

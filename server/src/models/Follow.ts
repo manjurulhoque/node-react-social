@@ -19,7 +19,7 @@ const FollowSchema = new mongoose.Schema(
             index: true,
         },
     },
-    { timestamps: true }
+    { timestamps: true, toObject: { versionKey: false } }
 );
 
 // Create a compound index for uniqueness and query efficiency

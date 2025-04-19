@@ -9,6 +9,13 @@ const UserSchema = new mongoose.Schema(
             min: 3,
             max: 20,
         },
+        username: {
+            type: String,
+            required: true,
+            unique: true,
+            min: 3,
+            max: 20,
+        },
         email: {
             type: String,
             required: true,
@@ -59,7 +66,7 @@ const UserSchema = new mongoose.Schema(
             enum: [1, 2, 3],
         },
     },
-    { timestamps: true }
+    { timestamps: true, toObject: { versionKey: false } }
 );
 
 export default mongoose.model<IUser>("User", UserSchema);

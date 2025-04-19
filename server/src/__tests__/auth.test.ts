@@ -12,6 +12,7 @@ describe("Auth Routes", () => {
         it("should register a new user successfully", async () => {
             const userData = {
                 name: "Test User",
+                username: "testuser",
                 email: "test@example.com",
                 password: "password123",
             };
@@ -25,11 +26,13 @@ describe("Auth Routes", () => {
             expect(response.body.data).toHaveProperty("_id");
             expect(response.body.data.email).toBe(userData.email);
             expect(response.body.data.name).toBe(userData.name);
+            expect(response.body.data.username).toBe(userData.username);
         });
 
-        it("should not register a user with existing email", async () => {
+        it("should not register a user with existing email or username", async () => {
             const userData = {
                 name: "Test User",
+                username: "testuser",
                 email: "test@example.com",
                 password: "password123",
             };
@@ -38,13 +41,29 @@ describe("Auth Routes", () => {
             await request(app).post("/api/auth/register").send(userData);
 
             // Second registration with same email
-            const response = await request(app)
+            const response1 = await request(app)
                 .post("/api/auth/register")
                 .send(userData);
 
-            expect(response.status).toBe(httpStatus.BAD_REQUEST);
-            expect(response.body.success).toBe(false);
-            expect(response.body.error.message).toBe("User already exists");
+            expect(response1.status).toBe(httpStatus.BAD_REQUEST);
+            expect(response1.body.success).toBe(false);
+            expect(response1.body.error.message).toBe(
+                "User already exists with this email or username"
+            );
+
+            // Second registration with same username but different email
+            const response2 = await request(app)
+                .post("/api/auth/register")
+                .send({
+                    ...userData,
+                    email: "different@example.com",
+                });
+
+            expect(response2.status).toBe(httpStatus.BAD_REQUEST);
+            expect(response2.body.success).toBe(false);
+            expect(response2.body.error.message).toBe(
+                "User already exists with this email or username"
+            );
         });
     });
 

@@ -18,7 +18,7 @@ const LikeSchema = new mongoose.Schema(
             required: true,
         },
     },
-    { timestamps: true }
+    { timestamps: true, toObject: { versionKey: false } }
 );
 
 // Create a compound index for uniqueness and query efficiency

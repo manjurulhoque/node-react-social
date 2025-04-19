@@ -11,10 +11,12 @@ const router = Router();
 //REGISTER
 router.post("/register", async (req: Request, res: Response) => {
     try {
-        const userExists = await User.findOne({ email: req.body.email });
+        const userExists = await User.findOne({
+            $or: [{ email: req.body.email }, { username: req.body.username }],
+        });
         if (userExists) {
             res.status(httpStatus.BAD_REQUEST).json(
-                errorResponse("User already exists")
+                errorResponse("User already exists with this email or username")
             );
             return;
         }
@@ -25,6 +27,7 @@ router.post("/register", async (req: Request, res: Response) => {
         //create new user
         const newUser = new User({
             name: req.body.name,
+            username: req.body.username,
             email: req.body.email,
             password: hashedPassword,
         });
@@ -35,6 +38,7 @@ router.post("/register", async (req: Request, res: Response) => {
             successResponse({
                 _id: user._id,
                 name: user.name,
+                username: user.username,
                 email: user.email,
             })
         );
@@ -77,6 +81,7 @@ router.post("/login", async (req: Request, res: Response) => {
             successResponse({
                 _id: userObj._id,
                 name: userObj.name,
+                username: userObj.username,
                 email: userObj.email,
                 profilePicture: userObj.profilePicture,
                 coverPicture: userObj.coverPicture,

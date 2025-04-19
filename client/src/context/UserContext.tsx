@@ -75,12 +75,12 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
             // Update the user in the users array if it exists
             setUsers(
-                users.map((user) => (user._id === userId ? res.data : user))
+                users.map((user) => (user._id === userId ? res.data.data : user))
             );
 
             // If this is the current user, update currentUser
             if (currentUser && currentUser._id === userId) {
-                setCurrentUser(res.data);
+                setCurrentUser(res.data.data);
             }
 
             setLoading(false);

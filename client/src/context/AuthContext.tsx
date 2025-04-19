@@ -31,6 +31,7 @@ interface AuthContextType {
     login: (email: string, password: string) => Promise<void>;
     register: (
         name: string,
+        username: string,
         email: string,
         password: string
     ) => Promise<boolean>;
@@ -137,6 +138,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const register = async (
         name: string,
+        username: string,
         email: string,
         password: string
     ): Promise<boolean> => {
@@ -145,6 +147,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setError(null);
             const res = await AxiosConfig.post("/auth/register", {
                 name,
+                username,
                 email,
                 password,
             });

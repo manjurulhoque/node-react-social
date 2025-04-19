@@ -19,7 +19,7 @@ const PostSchema = new mongoose.Schema(
             default: 0,
         },
     },
-    { timestamps: true }
+    { timestamps: true, toObject: { versionKey: false } }
 );
 
 export default mongoose.model<IPost>("Post", PostSchema);

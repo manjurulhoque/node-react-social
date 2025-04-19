@@ -24,6 +24,7 @@ router.get("/", auth, async (req: Request, res: Response) => {
                     postObj.user = {
                         _id: user._id,
                         name: user.name,
+                        username: user.username,
                         email: user.email,
                         profilePicture: user.profilePicture,
                         coverPicture: user.coverPicture,
@@ -180,6 +181,7 @@ router.get("/:id", auth, async (req: Request, res: Response) => {
             postObj.user = {
                 _id: user._id,
                 name: user.name,
+                username: user.username,
                 email: user.email,
                 profilePicture: user.profilePicture,
                 coverPicture: user.coverPicture,
@@ -230,6 +232,7 @@ router.get("/timeline/all", auth, async (req: Request, res: Response) => {
                     postObj.user = {
                         _id: user._id,
                         name: user.name,
+                        username: user.username,
                         email: user.email,
                         profilePicture: user.profilePicture,
                         coverPicture: user.coverPicture,
