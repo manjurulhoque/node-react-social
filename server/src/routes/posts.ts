@@ -63,7 +63,7 @@ router.post("/", auth, async (req: Request, res: Response) => {
 });
 
 //update a post
-router.put("/:id", async (req: Request, res: Response) => {
+router.put("/:id", auth, async (req: Request, res: Response) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {
@@ -90,7 +90,7 @@ router.put("/:id", async (req: Request, res: Response) => {
 });
 
 //delete a post
-router.delete("/:id", async (req: Request, res: Response) => {
+router.delete("/:id", auth, async (req: Request, res: Response) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {
@@ -117,7 +117,7 @@ router.delete("/:id", async (req: Request, res: Response) => {
 });
 
 //like / dislike a post
-router.put("/:id/like", async (req: Request, res: Response) => {
+router.put("/:id/like", auth, async (req: Request, res: Response) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {
@@ -128,9 +128,9 @@ router.put("/:id/like", async (req: Request, res: Response) => {
 
         const isLiked = await Like.findOne({
             postId: req.params.id,
-            userId: req.body.userId,
+            userId: req.userId,
         });
-        if (!isLiked && post.userId === req.body.userId) {
+        if (!isLiked && post.userId === req.userId) {
             return res
                 .status(status.FORBIDDEN)
                 .json(errorResponse("You cannot like your own post"));
@@ -138,7 +138,7 @@ router.put("/:id/like", async (req: Request, res: Response) => {
         if (!isLiked) {
             await Like.create({
                 postId: req.params.id,
-                userId: req.body.userId,
+                userId: req.userId,
             });
             await post.updateOne({ $inc: { likesCount: 1 } });
             res.status(status.OK).json(
@@ -147,7 +147,7 @@ router.put("/:id/like", async (req: Request, res: Response) => {
         } else {
             await Like.deleteOne({
                 postId: req.params.id,
-                userId: req.body.userId,
+                userId: req.userId,
             });
             await post.updateOne({ $inc: { likesCount: -1 } });
             res.status(status.OK).json(
@@ -163,7 +163,7 @@ router.put("/:id/like", async (req: Request, res: Response) => {
 });
 
 //get a post
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", auth, async (req: Request, res: Response) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) {
@@ -200,7 +200,7 @@ router.get("/:id", async (req: Request, res: Response) => {
 });
 
 //get timeline posts
-router.get("/timeline/all", async (req: Request, res: Response) => {
+router.get("/timeline/all", auth, async (req: Request, res: Response) => {
     try {
         const currentUser = await User.findById(req.body.userId);
         if (!currentUser) {
