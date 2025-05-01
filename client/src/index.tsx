@@ -1,16 +1,19 @@
-import { createRoot } from 'react-dom/client';
+import { createRoot } from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AuthProvider, PostProvider, UserProvider } from "./context";
+import { SocketProvider } from "./context/SocketContext";
 
 createRoot(document.getElementById("root") as HTMLElement).render(
     <AuthProvider>
-        <UserProvider>
-            <PostProvider>
-                <App />
-            </PostProvider>
-        </UserProvider>
+        <SocketProvider>
+            <UserProvider>
+                <PostProvider>
+                    <App />
+                </PostProvider>
+            </UserProvider>
+        </SocketProvider>
     </AuthProvider>
 );
 

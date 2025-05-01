@@ -1,0 +1,54 @@
+.audio-call-container {
+    background-color: #f8f9fa;
+    min-height: 100vh;
+}
+
+.audio-call-card {
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: white;
+    padding: 2rem;
+}
+
+.call-status {
+    margin-bottom: 2rem;
+}
+
+.call-status h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.call-status p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.audio-elements {
+    display: none;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.controls button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.controls button:hover {
+    transform: scale(1.1);
+}
+
+.controls button svg {
+    font-size: 1.5rem;
+} 

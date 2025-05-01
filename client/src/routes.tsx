@@ -4,6 +4,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AudioCallPage from "./pages/AudioCallPage";
 
 const BaseRouter = () => {
     return (
@@ -15,6 +16,7 @@ const BaseRouter = () => {
                         path="/profile/:userId"
                         element={<UserProfilePage />}
                     />
+                    <Route path="/call/:userId" element={<AudioCallPage />} />
                 </Route>
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
